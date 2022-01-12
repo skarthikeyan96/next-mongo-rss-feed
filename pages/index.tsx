@@ -5,19 +5,20 @@ import React from "react";
 import Parser from "rss-parser";
 
 const Home: NextPage = () => {
-  const [value, setValue] = React.useState('')
-  const handleChange = (event: { target: { value: React.SetStateAction<string>; }; }) => setValue(event.target.value)
+  const [value, setValue] = React.useState("");
+  const handleChange = (event: {
+    target: { value: React.SetStateAction<string> };
+  }) => setValue(event.target.value);
 
   const handleClick = async () => {
     const url = value;
-    console.log(process.env.NEXT_PUBLIC_ENV)
-    const CORS_PROXY = process.env.NEXT_PUBLIC_ENV === "development" ? `https://cors-anywhere.herokuapp.com/` : "";
-    let parser = new Parser();
-    let feed = await parser.parseURL(`${CORS_PROXY}${url}`);
-    console.log(feed)
-
-  }
-
+    const CORS_PROXY =
+      process.env.NEXT_PUBLIC_ENV === "development"
+        ? `https://cors-anywhere.herokuapp.com/`
+        : "";
+    const parser = new Parser();
+    return await parser.parseURL(`${CORS_PROXY}${url}`);
+  };
 
   return (
     <div>
@@ -28,15 +29,13 @@ const Home: NextPage = () => {
       </Head>
 
       <Box p={4}>
-        <Text>
-          RSS feed reader
-        </Text>
-        <Text mb='8px'>Value: {value}</Text>
+        <Text>RSS feed reader</Text>
+        <Text mb="8px">Value: {value}</Text>
         <Input
           value={value}
           onChange={handleChange}
-          placeholder='Here is a sample placeholder'
-          size='sm'
+          placeholder="Here is a sample placeholder"
+          size="sm"
         />
         <Button onClick={handleClick}> Show Feed Results </Button>
       </Box>
