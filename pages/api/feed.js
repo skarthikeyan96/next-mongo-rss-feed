@@ -11,7 +11,9 @@ export default async function handler(request, res) {
   if (request.method === "POST") {
     try {
       const feedData = await getFeed(request.body.url);
-      const newFeed = await database.collection("feed").insert(feedData);
+      const seed = [...feedData.items];
+      const data = transformSeed(seed, feedData.title);
+      const newFeed = await database.collection("feeds").insertMany(data);
       res.json({ status: 200, data: newFeed });
     } catch (error) {
       res.sendStatus(500).json(error);
@@ -19,10 +21,20 @@ export default async function handler(request, res) {
   }
   if (request.method === "GET") {
     try {
-      const feeds = await database.collection("feed").find({}).toArray();
+      const feeds = await database.collection("feeds").find({}).toArray();
       res.json(feeds);
     } catch (error) {
       res.send(error);
     }
   }
 }
+
+const transformSeed = (seed, title) => {
+  for (const element of seed) {
+    Object.assign(element, {
+      source: title,
+      isoDate: new Date(element.isoDate).toDateString(),
+    });
+  }
+  return seed;
+};

@@ -6,7 +6,6 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { format } from "date-fns";
 
 export default function Card({ id, title, description, date }: any) {
   return (
@@ -37,7 +36,7 @@ export default function Card({ id, title, description, date }: any) {
           >
             {title}
           </Heading>
-          <Text>{format(new Date(date), "PPP")}</Text>
+          <Text>{date}</Text>
         </Stack>
       </Box>
     </Center>

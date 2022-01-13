@@ -1,6 +1,7 @@
-import { Box, Button, Input, Text } from "@chakra-ui/react";
+import { Box, Button, Input } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import Head from "next/head";
+import router from "next/router";
 import React from "react";
 
 const Home: NextPage = () => {
@@ -11,7 +12,7 @@ const Home: NextPage = () => {
   }) => setValue(event.target.value);
 
   const handleClick = async () => {
-    return await fetch(`/api/feed`, {
+    const response = await fetch(`/api/feed`, {
       method: "post",
       headers: {
         Accept: "application/json",
@@ -21,6 +22,9 @@ const Home: NextPage = () => {
         url: value,
       }),
     }).then((res) => res.json());
+    if (response.status === 200) {
+      router.push("/");
+    }
   };
 
   return (
@@ -32,15 +36,19 @@ const Home: NextPage = () => {
       </Head>
 
       <Box p={4}>
-        <Text>RSS feed reader</Text>
-        <Text mb="8px">Value: {value}</Text>
-        <Input
-          value={value}
-          onChange={handleChange}
-          placeholder="Here is a sample placeholder"
-          size="sm"
-        />
-        <Button onClick={handleClick}> Show Feed Results </Button>
+        <Box>
+          <Input
+            value={value}
+            onChange={handleChange}
+            size="sm"
+            width={"50%"}
+            ml={4}
+          />
+          <Button ml={4} size="sm" onClick={handleClick}>
+            {" "}
+            Add to Feed{" "}
+          </Button>
+        </Box>
       </Box>
     </div>
   );
