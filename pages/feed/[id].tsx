@@ -21,7 +21,7 @@ const Feed = () => {
   return (
     <Box p={4}>
       <Text>RSS feed reader</Text>
-      {data[0].items.map((item) => {
+      {data[0].items.map((item: any) => {
         return (
           <a href={item.link} key={item.id}>
             <Card
