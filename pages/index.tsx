@@ -2,22 +2,25 @@ import { Box, Button, Input, Text } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import Head from "next/head";
 import React from "react";
-import Parser from "rss-parser";
 
 const Home: NextPage = () => {
   const [value, setValue] = React.useState("");
+
   const handleChange = (event: {
     target: { value: React.SetStateAction<string> };
   }) => setValue(event.target.value);
 
   const handleClick = async () => {
-    const url = value;
-    const CORS_PROXY =
-      process.env.NEXT_PUBLIC_ENV === "development"
-        ? `https://cors-anywhere.herokuapp.com/`
-        : "";
-    const parser = new Parser();
-    return await parser.parseURL(`${CORS_PROXY}${url}`);
+    return await fetch(`/api/feed`, {
+      method: "post",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        url: value,
+      }),
+    }).then((res) => res.json());
   };
 
   return (
